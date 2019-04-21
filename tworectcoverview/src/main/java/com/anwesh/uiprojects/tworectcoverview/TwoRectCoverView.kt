@@ -21,6 +21,7 @@ val strokeFactor : Int = 90
 val sizeFactor : Float = 2.9f
 val foreColor : Int = Color.parseColor("#673AB7")
 val backColor : Int = Color.parseColor("#BDBDBD")
+val angleDeg : Float = 90f
 
 fun Int.inverse() : Float = 1f / this
 fun Float.maxScale(i : Int, n : Int) : Float = Math.max(0f, this - i * n.inverse())
@@ -30,4 +31,33 @@ fun Float.mirrorValue(a : Int, b : Int) : Float {
     val k : Float = scaleFactor()
     return (1 - k) * a.inverse() + k * b.inverse()
 }
-fun Float.divideScale(dir : Float, a : Int, b : Int) : Float = mirrorValue(a, b) * dir * scGap
+fun Float.updateScale(dir : Float, a : Int, b : Int) : Float = mirrorValue(a, b) * dir * scGap
+fun Int.sjf() : Float = 1f - 2 * (this)
+
+fun Canvas.drawRotRect(x : Float, size : Float, sc1 : Float, sc2 : Float, paint : Paint) {
+    drawRect(RectF(0f, -size/2, x * sc2, size / 2), paint)
+    save()
+    translate(x , 0f)
+    rotate(angleDeg * sc1)
+    drawRect(RectF(-size/2, -size, size/2, size), paint)
+    restore()
+}
+
+fun Canvas.drawTRCNode(i : Int, scale : Float, paint : Paint) {
+    val w : Float = width.toFloat()
+    val h : Float = height.toFloat()
+    val gap : Float = h / (nodes + 1)
+    val size : Float = gap / sizeFactor
+    val sc1 : Float = scale.divideScale(0, 2)
+    val sc2 : Float = scale.divideScale(1, 2)
+    val xOffset : Float = (w / 2 - size)
+    save()
+    translate(w / 2, gap * (i + 1))
+    for (j in 0..(rects - 1)) {
+        save()
+        scale(j.sjf(), 1f)
+        drawRotRect(xOffset, size, sc1.divideScale(j, rects), sc2.divideScale(j, rects), paint)
+        restore()
+    }
+    restore()
+}
