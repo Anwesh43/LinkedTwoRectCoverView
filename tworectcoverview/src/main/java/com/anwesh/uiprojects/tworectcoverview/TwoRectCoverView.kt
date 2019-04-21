@@ -217,4 +217,13 @@ class TwoRectCoverView(ctx : Context) : View(ctx) {
             }
         }
     }
+
+    companion object {
+
+        fun create(activity : Activity) : TwoRectCoverView {
+            val view : TwoRectCoverView = TwoRectCoverView(activity)
+            activity.setContentView(view)
+            return view
+        }
+    }
 }
