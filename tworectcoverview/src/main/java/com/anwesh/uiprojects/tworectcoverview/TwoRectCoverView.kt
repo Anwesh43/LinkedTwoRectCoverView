@@ -194,4 +194,26 @@ class TwoRectCoverView(ctx : Context) : View(ctx) {
             curr.startUpdating(cb)
         }
     }
+
+    data class Renderer(var view : TwoRectCoverView) {
+
+        private val trc : TwoRectCover = TwoRectCover(0)
+        private val animator : Animator = Animator(view)
+
+        fun render(canvas : Canvas, paint : Paint) {
+            canvas.drawColor(backColor)
+            trc.draw(canvas, paint)
+            animator.animate {
+                trc.update {i, scl ->
+                    animator.stop()
+                }
+            }
+        }
+
+        fun handleTap() {
+            trc.startUpdating {
+                animator.start()
+            }
+        }
+    }
 }
