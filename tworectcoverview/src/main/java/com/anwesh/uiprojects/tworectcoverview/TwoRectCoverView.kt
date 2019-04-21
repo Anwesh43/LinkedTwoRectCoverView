@@ -17,7 +17,6 @@ val nodes : Int = 5
 val rects : Int = 2
 val scGap : Float = 0.05f
 val scDiv : Double = 0.51
-val strokeFactor : Int = 90
 val sizeFactor : Float = 2.9f
 val foreColor : Int = Color.parseColor("#673AB7")
 val backColor : Int = Color.parseColor("#BDBDBD")
@@ -51,6 +50,7 @@ fun Canvas.drawTRCNode(i : Int, scale : Float, paint : Paint) {
     val sc1 : Float = scale.divideScale(0, 2)
     val sc2 : Float = scale.divideScale(1, 2)
     val xOffset : Float = (w / 2 - size)
+    paint.color = foreColor
     save()
     translate(w / 2, gap * (i + 1))
     for (j in 0..(rects - 1)) {
